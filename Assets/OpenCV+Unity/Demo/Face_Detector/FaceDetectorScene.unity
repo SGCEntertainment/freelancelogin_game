@@ -510,6 +510,7 @@ MonoBehaviour:
   eyes: {fileID: 4900000, guid: a1203bc8d0ab3b5469c52993e6874d7a, type: 3}
   shapes: {fileID: 4900000, guid: 8141d4a0988291c4f9e5fba2a3e448f1, type: 3}
   line: {fileID: 877224779}
+  outText: {fileID: 2094598232}
 --- !u!114 &1686030363
 MonoBehaviour:
   m_ObjectHideFlags: 0
