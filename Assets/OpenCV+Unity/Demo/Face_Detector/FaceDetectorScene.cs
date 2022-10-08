@@ -12,6 +12,9 @@
 		public TextAsset eyes;
 		public TextAsset shapes;
 
+		[Space(10)]
+		[SerializeField] Transform line;
+
 		private FaceProcessorLive<WebCamTexture> processor;
 
 		/// <summary>
@@ -62,7 +65,9 @@
 			processor.ProcessTexture(input, TextureParameters);
 
 			// mark detected objects
-			processor.MarkDetected();
+			processor.MarkDetected(out float headY);
+
+			Debug.Log($"headY:{headY} & lineY:{line.position.y}");
 
 			// processor.Image now holds data we'd like to visualize
 			output = Unity.MatToTexture(processor.Image, output);   // if output is valid texture it's buffer will be re-used, otherwise it will be re-created
