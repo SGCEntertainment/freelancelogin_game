@@ -1,0 +1,131 @@
+name: Build
+
+on: [workflow_dispatch]
+
+env:
+  UNITY_LICENSE: "<?xml version=\"1.0\" encoding=\"UTF-8\"?><root>\n    <License id=\"Terms\">\n        <MachineBindings>\n            <Binding Key=\"1\" Value=\"576562626572264761624c65526f7578\"/>\n            <Binding Key=\"2\" Value=\"576562626572264761624c65526f7578\"/>\n        </MachineBindings>\n        <MachineID Value=\"D7nTUnjNAmtsUMcnoyrqkgIbYdM=\"/>\n        <SerialHash Value=\"1efd68fa935192b6090ac03c77d289a9f588c55a\"/>\n        <Features>\n            <Feature Value=\"33\"/>\n            <Feature Value=\"1\"/>\n            <Feature Value=\"12\"/>\n            <Feature Value=\"2\"/>\n            <Feature Value=\"24\"/>\n            <Feature Value=\"3\"/>\n            <Feature Value=\"36\"/>\n            <Feature Value=\"17\"/>\n            <Feature Value=\"19\"/>\n            <Feature Value=\"62\"/>\n        </Features>\n        <DeveloperData Value=\"AQAAAEY0LUg2WFMtUE00NS1SM0M4LUUyWlotWkdWOA==\"/>\n        <SerialMasked Value=\"F4-H6XS-PM45-R3C8-E2ZZ-XXXX\"/>\n        <StartDate Value=\"2018-05-02T00:00:00\"/>\n        <UpdateDate Value=\"2021-05-21T20:48:24\"/>\n        <InitialActivationDate Value=\"2018-05-02T14:21:28\"/>\n        <LicenseVersion Value=\"6.x\"/>\n        <ClientProvidedVersion Value=\"2019.2.11f1\"/>\n        <AlwaysOnline Value=\"false\"/>\n        <Entitlements>\n            <Entitlement Ns=\"unity_editor\" Tag=\"UnityPersonal\" Type=\"EDITOR\" ValidTo=\"9999-12-31T00:00:00\"/>\n            <Entitlement Ns=\"unity_editor\" Tag=\"DarkSkin\" Type=\"EDITOR_FEATURE\" ValidTo=\"9999-12-31T00:00:00\"/>\n        </Entitlements>\n    </License>\n<Signature xmlns=\"http://www.w3.org/2000/09/xmldsig#\"><SignedInfo><CanonicalizationMethod Algorithm=\"http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments\"/><SignatureMethod Algorithm=\"http://www.w3.org/2000/09/xmldsig#rsa-sha1\"/><Reference URI=\"#Terms\"><Transforms><Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/></Transforms><DigestMethod Algorithm=\"http://www.w3.org/2000/09/xmldsig#sha1\"/><DigestValue>Ui8I607il6gWRH3o8x/HMV7eva8=</DigestValue></Reference></SignedInfo><SignatureValue>bW/8QoV0skYzBUtBvMCxZsQa1kjdBw1cumQZeaSuF9FjpHzp3blFEBTtvvOOB7C0j/19qtdV/QMq\nXkMQj2qQ99rYQPXSrPKySQrdm/6riYd2VPhOMc4QSsbV/OphYOMYkYju1tsvY4ZDi6TDFuT7C1OR\nwiCtmvbUs9Lw/u3jMGjWd/cqZAkupulnXpGz8ltI2GA3RWwpFH+rxEOJWlpqYIfioKntlHv8dbAx\n5fONrmMH2yMJQaS3YOW2noZkoMCgMlsuXE6ddqKz0soWbYXqXEQcNHY4JWcDr97ISdeI3fDP1/XR\nz0bzpLWTGR4lPxuREKW7jqnk/NwoVUXx+anUKg==</SignatureValue></Signature></root>"
+  UNITY_EMAIL: "unitydatastorage@gmail.com"
+  UNITY_PASSWORD: "qwerty12345Q"
+  APP_NAME: "freelancelogin_game"
+
+jobs:
+
+  Archiving:
+    runs-on: ubuntu-latest
+    needs: [buildAndroidAPK, buildAndroidAAB]
+    steps:
+    
+      - uses: actions/checkout@v2
+      
+      - uses: actions/download-artifact@v2
+        with:
+             name: build-Android
+             path: ${{ github.workspace }}/build/Android
+             
+      - uses: vimtor/action-zip@v1
+        with:
+            files: build/Android
+            dest: project_folder/${{ env.APP_NAME }}.zip
+            
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+            name: build-Android
+                
+      - uses: actions/upload-artifact@v1
+        with:
+           name: ${{ env.APP_NAME }}
+           path: ${{ github.workspace }}/project_folder/${{ env.APP_NAME }}.zip
+           
+  SendTelegramNotify:
+    runs-on: ubuntu-latest
+    needs: Archiving
+    name: Send Telegram Notify
+    
+    steps: 
+      - uses: actions/checkout@v2
+      
+      - uses: actions/download-artifact@v2
+        id: download
+        with:
+            name: ${{ env.APP_NAME }}
+            path: ${{ github.workspace }}/project_folder
+            
+      - name: send telegram message
+        uses: appleboy/telegram-action@master
+        with:
+              to: "1034562126"
+              token: "5541471253:AAFGq-cwlYERC9nSYc68_94bWOH0Fx1KkVU"
+              message: " "
+              document: '${{ github.workspace }}/project_folder/${{ env.APP_NAME }}.zip'
+              
+      - uses: geekyeggo/delete-artifact@v1
+        with:
+            name: "КЦ"
+      
+
+  buildAndroidAPK:
+    name: Build for Android(APK)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - Android
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
+          
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+          
+      - uses: game-ci/unity-builder@v2.0.4
+        with:
+          androidAppBundle: false
+          androidKeystoreName: user.keystore
+          androidKeystoreBase64: "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"
+          androidKeystorePass: "qwerty12345Q"
+          androidKeyaliasName: "qwerty12345q"
+          androidKeyaliasPass: "qwerty12345Q"
+          targetPlatform: ${{ matrix.targetPlatform }}
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-Android
+          path: build/Android
+          
+  buildAndroidAAB:
+    name: Build for Android(AAB)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - Android
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
+          
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+          
+      - uses: game-ci/unity-builder@v2.0.4
+        with:
+          androidAppBundle: true
+          androidKeystoreName: user.keystore
+          androidKeystoreBase64: "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"
+          androidKeystorePass: "qwerty12345Q"
+          androidKeyaliasName: "qwerty12345q"
+          androidKeyaliasPass: "qwerty12345Q"
+          targetPlatform: ${{ matrix.targetPlatform }}
+          
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-Android
+          path: build/Android
