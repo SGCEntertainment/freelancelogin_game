@@ -8,6 +8,8 @@
 
 	public class FaceDetectorScene : WebCamera
 	{
+		DetectedFace detectedFace;
+
 		int score;
 		[SerializeField] Text scoreText;
 
@@ -71,6 +73,22 @@
 					line.position = new Vector2(line.position.x, Input.mousePosition.y);
 				}
 			}
+
+			if(detectedFace != null)
+			{
+                Vector2 screenPoint = Camera.main.WorldToScreenPoint(line.position);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, Camera.main, out Vector2 localPosition);
+
+                localPosition.x += rectTransform.sizeDelta.x / 2;
+                localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
+
+                outText.text = $"Head Y:{detectedFace.Region.Center.Y} & line Y: {localPosition.y}";
+                if (detectedFace.Region.Center.Y > localPosition.y)
+                {
+                    score++;
+                    scoreText.text = $"score: {score}";
+                }
+            }
 		}
 
 		/// <summary>
@@ -84,18 +102,7 @@
             // mark detected objects
             processor.MarkDetected();
 
-            Vector2 screenPoint = Camera.main.WorldToScreenPoint(line.position);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, Camera.main, out Vector2 localPosition);
-
-            localPosition.x += rectTransform.sizeDelta.x / 2;
-            localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
-
-            outText.text = $"Head Y:{processor.Faces[0].Region.Center.Y} & line Y: {localPosition.y}";
-			if (processor.Faces[0].Region.Center.Y > localPosition.y)
-			{
-				score++;
-				scoreText.text = $"score: {score}";
-			}
+			detectedFace = processor.Faces[0];
 
 			// processor.Image now holds data we'd like to visualize
 			output = Unity.MatToTexture(processor.Image, output);   // if output is valid texture it's buffer will be re-used, otherwise it will be re-created
