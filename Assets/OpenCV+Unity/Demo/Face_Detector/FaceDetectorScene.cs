@@ -8,6 +8,9 @@
 
 	public class FaceDetectorScene : WebCamera
 	{
+		int score;
+		[SerializeField] Text scoreText;
+
 		public TextAsset faces;
 		public TextAsset eyes;
 		public TextAsset shapes;
@@ -59,6 +62,17 @@
 			processor.Performance.SkipRate = 0;             // we actually process only each Nth frame (and every frame for skipRate = 0)
 		}
 
+		private void Update()
+		{
+			if(Input.GetMouseButton(0))
+			{
+				if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition))
+				{
+					line.position = new Vector2(line.position.x, Input.mousePosition.y);
+				}
+			}
+		}
+
 		/// <summary>
 		/// Per-frame video capture processor
 		/// </summary>
@@ -76,7 +90,12 @@
             localPosition.x += rectTransform.sizeDelta.x / 2;
             localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
 
-            outText.text = $"Head Y:{processor.Faces[0].Region.Location.Y} & line Y: {localPosition.y}";
+            outText.text = $"Head Y:{processor.Faces[0].Region.Center.Y} & line Y: {localPosition.y}";
+			if (processor.Faces[0].Region.Center.Y > localPosition.y)
+			{
+				score++;
+				scoreText.text = $"score: {score}";
+			}
 
 			// processor.Image now holds data we'd like to visualize
 			output = Unity.MatToTexture(processor.Image, output);   // if output is valid texture it's buffer will be re-used, otherwise it will be re-created
