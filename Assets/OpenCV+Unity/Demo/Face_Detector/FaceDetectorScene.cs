@@ -72,21 +72,21 @@
 				}
 			}
 
-			if(processor.Faces.Count > 0)
-			{
-                Vector2 screenPoint = Camera.main.WorldToScreenPoint(line.position);
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, Camera.main, out Vector2 localPosition);
+			//if (processor.Faces.Count > 0)
+			//{
+			//	Vector2 screenPoint = Camera.main.WorldToScreenPoint(line.position);
+			//	RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, Camera.main, out Vector2 localPosition);
 
-                localPosition.x += rectTransform.sizeDelta.x / 2;
-                localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
+			//	localPosition.x += rectTransform.sizeDelta.x / 2;
+			//	localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
 
-                outText.text = $"Head Y:{processor.Faces[0].Region.Center.Y} & line Y: {localPosition.y}";
-                if (processor.Faces[0].Region.Center.Y > localPosition.y)
-                {
-                    score++;
-                    scoreText.text = $"score: {score}";
-                }
-            }
+			//	outText.text = $"Head Y:{processor.Faces[0].Region.Center.Y} & line Y: {localPosition.y}";
+			//	if (processor.Faces[0].Region.Center.Y > localPosition.y)
+			//	{
+			//		score++;
+			//		scoreText.text = $"score: {score}";
+			//	}
+			//}
 		}
 
 		/// <summary>
