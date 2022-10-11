@@ -70,11 +70,13 @@
             // mark detected objects
             processor.MarkDetected();
 
-			Vector2 localPoint = new Vector2(processor.Faces[0].Region.X, processor.Faces[0].Region.Y);
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(line.position);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, Camera.main, out Vector2 localPosition);
 
-			RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, localPoint, Camera.main, out Vector3 center);
+            localPosition.x += rectTransform.sizeDelta.x / 2;
+            localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
 
-			outText.text = $"Head Center:{center}";
+            outText.text = $"Head Y:{processor.Faces[0].Region.Location.Y} & line Y: {localPosition.y}";
 
 			// processor.Image now holds data we'd like to visualize
 			output = Unity.MatToTexture(processor.Image, output);   // if output is valid texture it's buffer will be re-used, otherwise it will be re-created
