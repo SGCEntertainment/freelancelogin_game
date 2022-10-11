@@ -298,16 +298,13 @@
         /// <summary>
         /// Marks detected objects on the texture
         /// </summary>
-        public void MarkDetected(out float headYPos, bool drawSubItems = true)
+        public void MarkDetected(bool drawSubItems = true)
         {
-            headYPos = 0;
-
             // mark each found eye
             foreach (DetectedFace face in Faces)
             {
                 // face rect
                 Cv2.Rectangle((InputOutputArray)Image, face.Region, Scalar.FromRgb(255, 0, 0), 2);
-                headYPos = face.Region.Y;
 
                 // convex hull
                 //Cv2.Polylines(Image, new IEnumerable<Point>[] { face.Info.ConvexHull }, true, Scalar.FromRgb(255, 0, 0), 2);
@@ -316,7 +313,9 @@
                 if (face.Info != null)
                 {
                     foreach (DetectedFace.Triangle tr in face.Info.DelaunayTriangles)
+                    {
                         Cv2.Polylines(Image, new IEnumerable<Point>[] { tr.ToArray() }, true, Scalar.FromRgb(0, 0, 255), 1);
+                    }
                 }
 
                 // Sub-items

@@ -64,11 +64,11 @@
 		{
 			// detect everything we're interested in
 			processor.ProcessTexture(input, TextureParameters);
-
+			
 			// mark detected objects
-			processor.MarkDetected(out float headY);
+			processor.MarkDetected();
 
-			outText.text = $"headY:{headY} & lineY:{line.position.y}";
+			outText.text = $"headY:{processor.Faces[0].Region.Location.Y} & lineY:{line.position.y}";
 
 			// processor.Image now holds data we'd like to visualize
 			output = Unity.MatToTexture(processor.Image, output);   // if output is valid texture it's buffer will be re-used, otherwise it will be re-created
