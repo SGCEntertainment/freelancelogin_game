@@ -64,13 +64,13 @@
 
 		private void Update()
 		{
-			if(Input.GetMouseButton(0))
-			{
-				if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition))
-				{
-					line.position = new Vector2(line.position.x, Input.mousePosition.y);
-				}
-			}
+			//if(Input.GetMouseButton(0))
+			//{
+			//	if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition))
+			//	{
+			//		line.position = new Vector2(line.position.x, Input.mousePosition.y);
+			//	}
+			//}
 
 			//if (processor.Faces.Count > 0)
 			//{
