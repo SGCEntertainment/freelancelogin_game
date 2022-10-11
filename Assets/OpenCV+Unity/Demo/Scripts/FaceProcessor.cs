@@ -313,9 +313,7 @@
                 if (face.Info != null)
                 {
                     foreach (DetectedFace.Triangle tr in face.Info.DelaunayTriangles)
-                    {
                         Cv2.Polylines(Image, new IEnumerable<Point>[] { tr.ToArray() }, true, Scalar.FromRgb(0, 0, 255), 1);
-                    }
                 }
 
                 // Sub-items
