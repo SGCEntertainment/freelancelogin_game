@@ -68,7 +68,7 @@
 			// mark detected objects
 			processor.MarkDetected();
 
-			outText.text = $"headY:{processor.Faces[0].Region.Y} & lineY:{line.localPosition.y}";
+			outText.text = $"Head Center:{processor.Faces[0].Region.Center} & line Y:{line.localPosition.y}";
 
 			// processor.Image now holds data we'd like to visualize
 			output = Unity.MatToTexture(processor.Image, output);   // if output is valid texture it's buffer will be re-used, otherwise it will be re-created
