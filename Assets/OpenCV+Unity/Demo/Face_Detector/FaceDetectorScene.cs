@@ -12,6 +12,8 @@
 		public TextAsset eyes;
 		public TextAsset shapes;
 
+		public RectTransform rectTransform;
+
 		[Space(10)]
 		[SerializeField] Transform line;
 		[SerializeField] Text outText;
@@ -68,13 +70,11 @@
             // mark detected objects
             processor.MarkDetected();
 
-			Vector2 center = new Vector2(0, 0)
-			{
-				x = processor.Faces[0].Region.X + output.width / 2,
-				y = processor.Faces[0].Region.Y + output.height / 2
-			};
+			Vector2 localPoint = new Vector2(processor.Faces[0].Region.X, processor.Faces[0].Region.Y);
 
-			outText.text = $"Head Center:{center} & image sizeDelta: {new Vector2(output.width, output.height)}";
+			RectTransformUtility.ScreenPointToWorldPointInRectangle(rectTransform, localPoint, Camera.main, out Vector3 center);
+
+			outText.text = $"Head Center:{center}";
 
 			// processor.Image now holds data we'd like to visualize
 			output = Unity.MatToTexture(processor.Image, output);   // if output is valid texture it's buffer will be re-used, otherwise it will be re-created
