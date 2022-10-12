@@ -86,17 +86,18 @@ namespace OpenCvSharp.Demo
 			Unity.TextureConversionParams parameters = new Unity.TextureConversionParams();
 
 			// frontal camera - we must flip around Y axis to make it mirror-like
-			parameters.FlipHorizontally = forceFrontalCamera || webCamDevice.Value.isFrontFacing;
-			
-			// TODO:
-			// actually, code below should work, however, on our devices tests every device except iPad
-			// returned "false", iPad said "true" but the texture wasn't actually flipped
+			//parameters.FlipHorizontally = forceFrontalCamera || webCamDevice.Value.isFrontFacing;
+			parameters.FlipHorizontally = false;
 
-			// compensate vertical flip
-			//parameters.FlipVertically = webCamTexture.videoVerticallyMirrored;
-			
-			// deal with rotation
-			if (0 != webCamTexture.videoRotationAngle)
+            // TODO:
+            // actually, code below should work, however, on our devices tests every device except iPad
+            // returned "false", iPad said "true" but the texture wasn't actually flipped
+
+            // compensate vertical flip
+            //parameters.FlipVertically = webCamTexture.videoVerticallyMirrored;
+
+            // deal with rotation
+            if (0 != webCamTexture.videoRotationAngle)
 				parameters.RotationAngle = webCamTexture.videoRotationAngle; // cw -> ccw
 
 			// apply
