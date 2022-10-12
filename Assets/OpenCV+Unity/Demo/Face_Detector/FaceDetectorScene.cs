@@ -62,33 +62,6 @@
 			processor.Performance.SkipRate = 0;             // we actually process only each Nth frame (and every frame for skipRate = 0)
 		}
 
-		//private void Update()
-		//{
-		//	if (Input.GetMouseButton(0))
-		//	{
-		//		if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition))
-		//		{
-		//			line.position = new Vector2(line.position.x, Input.mousePosition.y);
-		//		}
-		//	}
-
-		//	if (processor.Faces.Count > 0)
-		//	{
-		//		Vector2 screenPoint = Camera.main.WorldToScreenPoint(line.position);
-		//		RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, screenPoint, Camera.main, out Vector2 localPosition);
-
-		//		localPosition.x += rectTransform.sizeDelta.x / 2;
-		//		localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
-
-		//		outText.text = $"Head Y:{processor.Faces[0].Region.Center.Y} & line Y: {localPosition.y}";
-		//		if (processor.Faces[0].Region.Center.Y > localPosition.y)
-		//		{
-		//			score++;
-		//			scoreText.text = $"score: {score}";
-		//		}
-		//	}
-		//}
-
 		/// <summary>
 		/// Per-frame video capture processor
 		/// </summary>
@@ -112,7 +85,7 @@
                 localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
 
                 outText.text = $"Head Y:{processor.Faces[0].Region.Center.Y} & line Y: {localPosition.y}";
-                if (processor.Faces[0].Region.Center.Y > localPosition.y)
+                if (processor.Faces[0].Region.Center.Y < localPosition.y)
                 {
                     score++;
                     scoreText.text = $"score: {score}";
