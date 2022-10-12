@@ -8,6 +8,8 @@
 
 	public class FaceDetectorScene : WebCamera
 	{
+		bool scoreAdded;
+
         int score;
         [SerializeField] Text scoreText;
 
@@ -85,11 +87,16 @@
                 localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
 
                 outText.text = $"Head Y:{processor.Faces[0].Region.Center.Y} & line Y: {localPosition.y}";
-                if (processor.Faces[0].Region.Center.Y < localPosition.y)
+                if (!scoreAdded && processor.Faces[0].Region.Bottom < localPosition.y)
                 {
                     score++;
                     scoreText.text = $"score: {score}";
+					scoreAdded = true;
                 }
+				else
+				{
+					scoreAdded = false;
+				}
             }
 
             return true;
