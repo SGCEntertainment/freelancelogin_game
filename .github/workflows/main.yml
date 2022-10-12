@@ -12,7 +12,7 @@ jobs:
 
   Archiving:
     runs-on: ubuntu-latest
-    needs: [buildAndroidAPK, buildAndroidAAB]
+    needs: [buildAndroidAPK]
     steps:
     
       - uses: actions/checkout@v2
@@ -60,7 +60,7 @@ jobs:
               
       - uses: geekyeggo/delete-artifact@v1
         with:
-            name: "КЦ"
+            name: env.APP_NAME
       
 
   buildAndroidAPK:
@@ -85,39 +85,6 @@ jobs:
       - uses: game-ci/unity-builder@v2.0.4
         with:
           androidAppBundle: false
-          androidKeystoreName: user.keystore
-          androidKeystoreBase64: "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"
-          androidKeystorePass: "qwerty12345Q"
-          androidKeyaliasName: "qwerty12345q"
-          androidKeyaliasPass: "qwerty12345Q"
-          targetPlatform: ${{ matrix.targetPlatform }}
-          
-      - uses: actions/upload-artifact@v2
-        with:
-          name: build-Android
-          path: build/Android
-          
-  buildAndroidAAB:
-    name: Build for Android(AAB)
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - Android
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.4.2
-          
-      - uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
-          
-      - uses: game-ci/unity-builder@v2.0.4
-        with:
-          androidAppBundle: true
           androidKeystoreName: user.keystore
           androidKeystoreBase64: "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"
           androidKeystorePass: "qwerty12345Q"
