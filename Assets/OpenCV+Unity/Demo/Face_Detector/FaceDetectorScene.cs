@@ -9,6 +9,7 @@
 	public class FaceDetectorScene : WebCamera
 	{
 		bool scoreAdded;
+		float lastY;
 
         int score;
         [SerializeField] Text scoreText;
@@ -31,7 +32,9 @@
 		protected override void Awake()
 		{
 			base.Awake();
-			base.forceFrontalCamera = true; // we work with frontal cams here, let's force it for macOS s MacBook doesn't state frontal cam correctly
+		
+			forceFrontalCamera = true; // we work with frontal cams here, let's force it for macOS s MacBook doesn't state frontal cam correctly
+			
 
 			byte[] shapeDat = shapes.bytes;
 			if (shapeDat.Length == 0)
@@ -86,11 +89,14 @@
                 localPosition.x += rectTransform.sizeDelta.x / 2;
                 localPosition.y = rectTransform.sizeDelta.y / 2 - localPosition.y;
 
+
+
                 if (processor.Faces[0].Region.Bottom < localPosition.y)
                 {
 					if(!scoreAdded)
 					{
                         score++;
+						//lastY = processor.Faces[0].Region.Bottom;
                         scoreText.text = $"score: {score}";
                         scoreAdded = true;
                     }
