@@ -93,7 +93,7 @@
                     scoreText.text = $"score: {score}";
 					scoreAdded = true;
                 }
-				else
+				else if(processor.Faces[0].Region.Top > localPosition.y)
 				{
 					scoreAdded = false;
 				}
