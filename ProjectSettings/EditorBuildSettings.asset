@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/OpenCV+Unity/Demo/Face_Detector/FaceDetectorScene.unity
+    path: Assets/freelancelogin_game/Scenes/demo.unity
     guid: dc53129b9536b4047802944847361339
   m_configObjects: {}
