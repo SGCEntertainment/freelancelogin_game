@@ -30,7 +30,7 @@
 		
 			forceFrontalCamera = true; // we work with frontal cams here, let's force it for macOS s MacBook doesn't state frontal cam correctly
 
-			faces = (TextAsset)AssetDatabase.LoadAssetAtPath("Assets/freelancelogin_game/Haarcascades/haarcascade_frontalface_default.xml", typeof(TextAsset));
+			faces = Resources.Load<TextAsset>("haarcascade_frontalface_default");
 			processor = new FaceProcessorLive<WebCamTexture>();
 			processor.Initialize(faces.text);
 
